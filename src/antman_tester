@@ -1,0 +1,38 @@
+#!/bin/sh
+python3 /usr/local/lib/antman_tester/generator.py $1
+FILE=antman
+if [ -f $FILE ]
+then
+    ./antman test 1 > compressed_file
+    python3 /usr/local/lib/antman_tester/pourcentage.py test compressed_file
+    FILE2=giantman
+    if [ -f $FILE2 ]
+    then
+        ./giantman compressed_file 1 > final_file
+        OUTPUT=`cat test`
+        OUTPUT2=`cat final_file`
+        if [[ $OUTPUT == $OUTPUT2 ]]
+        then
+            tput setaf 2
+            echo "Antman 0K"
+            tput init
+        else
+            tput setaf 1
+            echo "Antman K0 : Output different from expected output"
+            echo "Expected : $OUTPUT"
+            echo "But Got : $OUTPUT2"
+            tput init
+        fi
+        rm -f final_file
+    else
+        tput setaf 1
+        echo "[ERROR] : giantman file not found"
+        tput setaf init
+    fi
+    rm -f compressed_file
+else
+    tput setaf 1
+    echo "[ERROR] : antman file not found"
+    tput setaf init
+fi
+rm -rf test
