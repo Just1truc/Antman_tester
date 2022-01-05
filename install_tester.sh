@@ -35,4 +35,5 @@ tput sgr0
 tput setab 2
 tput blink
 echo "=> Installation Done"
+tput init
 tput sgr0

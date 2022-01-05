@@ -19,9 +19,11 @@ then
         else
             tput setaf 1
             echo "Antman K0 : Output different from expected output"
-            echo "Expected : $OUTPUT"
-            echo "But Got : $OUTPUT2"
             tput init
+            echo "Expected :"
+            echo "$OUTPUT"
+            echo "But Got :"
+            echo "$OUTPUT2"
         fi
         rm -f final_file
     else
