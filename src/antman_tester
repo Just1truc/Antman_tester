@@ -9,8 +9,10 @@ then
     if [ -f $FILE2 ]
     then
         ./giantman compressed_file 1 > final_file
-        OUTPUT=`cat test`
-        OUTPUT2=`cat final_file`
+        tests=test
+        final_files=final_file
+        OUTPUT=$(bash -c "cat $tests")
+        OUTPUT2=$(bash -c "cat $final_files")
         if [[ $OUTPUT == $OUTPUT2 ]]
         then
             tput setaf 2
