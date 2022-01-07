@@ -1,11 +1,11 @@
 #!/bin/sh
 python3 /usr/local/lib/antman_tester/generator.py $1
-FILE=antman
+FILE=antman/antman
 if [ -f $FILE ]
 then
     ./antman test 1 > compressed_file
     python3 /usr/local/lib/antman_tester/pourcentage.py test compressed_file
-    FILE2=giantman
+    FILE2=giantman/giantman
     if [ -f $FILE2 ]
     then
         ./giantman compressed_file 1 > final_file
