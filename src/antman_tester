@@ -9,9 +9,13 @@ then
     if [ -f $FILE2 ]
     then
         ./giantman compressed_file 1 > final_file
+        echo "file" > f1
+        echo "file" > f2
+        good=$(bash -c "diff f1 f2")
+        diff=$(bash -c "diff final_file test")
         OUTPUT=$(< test)
         OUTPUT2=$(< final_file)
-        if [[ $OUTPUT == $OUTPUT2 ]]
+        if [[ $diff == $good ]]
         then
             tput setaf 2
             echo "Antman 0K"
