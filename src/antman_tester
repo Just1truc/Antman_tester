@@ -3,12 +3,12 @@ python3 /usr/local/lib/antman_tester/generator.py $1
 FILE=antman/antman
 if [ -f $FILE ]
 then
-    ./antman test 1 > compressed_file
+    ./antman/antman test.txt 1 > compressed_file
     python3 /usr/local/lib/antman_tester/pourcentage.py test.txt compressed_file
     FILE2=giantman/giantman
     if [ -f $FILE2 ]
     then
-        ./giantman compressed_file 1 > final_file
+        ./giantman/giantman compressed_file 1 > final_file
         echo "file" > f1
         echo "file" > f2
         good=$(bash -c "diff f1 f2")
