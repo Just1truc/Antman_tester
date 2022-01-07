@@ -29,6 +29,8 @@ then
             echo "But Got :"
             echo "$OUTPUT2"
         fi
+        rm -f f1
+        rm -f f2
         rm -f final_file
     else
         tput setaf 1
