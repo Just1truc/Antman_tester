@@ -4,7 +4,7 @@ FILE=antman/antman
 if [ -f $FILE ]
 then
     ./antman test 1 > compressed_file
-    python3 /usr/local/lib/antman_tester/pourcentage.py test compressed_file
+    python3 /usr/local/lib/antman_tester/pourcentage.py test.txt compressed_file
     FILE2=giantman/giantman
     if [ -f $FILE2 ]
     then
@@ -12,8 +12,8 @@ then
         echo "file" > f1
         echo "file" > f2
         good=$(bash -c "diff f1 f2")
-        diff=$(bash -c "diff final_file test")
-        OUTPUT=$(< test)
+        diff=$(bash -c "diff final_file test.txt")
+        OUTPUT=$(< test.txt)
         OUTPUT2=$(< final_file)
         if [[ $diff == $good ]]
         then
@@ -43,4 +43,4 @@ else
     echo "[ERROR] : antman file not found"
     tput setaf init
 fi
-rm -rf test
+rm -rf test.txt
