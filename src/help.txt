@@ -8,6 +8,8 @@ USAGE
     
     antman_tester random [SIZE-OF-TEST-FILE] : test antman on randomly generated file
 
+    antman_tester add [file] : add a new file to the test list
+
 DESCRIPTION
 
     Test antman project with given configuations.
