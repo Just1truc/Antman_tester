@@ -9,7 +9,6 @@ compress () {
     diff=$(bash -c "diff result $res")
     OUTPUT=$(< $res)
     OUTPUT2=$(< result)
-    echo "Compression :"
     python3 /usr/local/lib/antman_tester/pourcentage.py $res compressed_file
     if [[ $diff == $good ]]
     then
