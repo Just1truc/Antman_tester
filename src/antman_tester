@@ -1,46 +1,145 @@
 #!/bin/sh
-python3 /usr/local/lib/antman_tester/generator.py $1
-FILE=antman/antman
-if [ -f $FILE ]
-then
-    ./antman/antman test.txt 1 > compressed_file
-    python3 /usr/local/lib/antman_tester/pourcentage.py test.txt compressed_file
-    FILE2=giantman/giantman
-    if [ -f $FILE2 ]
+
+compress () {
+    ./antman/antman $res > compressed_file
+    ./giantman/giantman compressed_file > result
+    echo "file" > f1
+    echo "file" > f2
+    good=$(bash -c "diff f1 f2")
+    diff=$(bash -c "diff result $res")
+    OUTPUT=$(< $res)
+    OUTPUT2=$(< result)
+    echo "Compression :"
+    python3 /usr/local/lib/antman_tester/pourcentage.py $res compressed_file
+    if [[ $diff == $good ]]
     then
-        ./giantman/giantman compressed_file 1 > final_file
-        echo "file" > f1
-        echo "file" > f2
-        good=$(bash -c "diff f1 f2")
-        diff=$(bash -c "diff final_file test.txt")
-        OUTPUT=$(< test.txt)
-        OUTPUT2=$(< final_file)
-        if [[ $diff == $good ]]
-        then
-            tput setaf 2
-            echo "Antman 0K"
-            tput init
-        else
-            tput setaf 1
-            echo "Antman K0 : Output different from expected output"
-            tput init
-            echo "Expected :"
-            echo "$OUTPUT"
-            echo "But Got :"
-            echo "$OUTPUT2"
-        fi
-        rm -f f1
-        rm -f f2
-        rm -f final_file
+        tput setaf 2
+        echo "Antman 0K"
+        tput init
     else
         tput setaf 1
-        echo "[ERROR] : giantman file not found"
-        tput setaf init
+        echo "Antman K0 : Output different from expected output"
+        tput init
+        echo "Expected :"
+        echo "$OUTPUT"
+        echo "But Got :"
+        echo "$OUTPUT2"
     fi
     rm -f compressed_file
+    rm -f result
+    rm -f f1 f2 resu
+}
+
+if [ $# == 0 ]
+then
+    FILE=./antman/antman
+    if [ -f $FILE ]
+    then
+        FILE2=./giantman/giantman
+        if [ -f $FILE2 ]
+        then
+            tput bold
+            echo "=========="
+            echo "EASY TESTS"
+            echo "=========="
+            tput sgr0
+            echo " "
+            bold=$(tput bold)
+            sgr=$(tput sgr0)
+            for file2compress in `ls /usr/local/lib/antman_tester/easy`
+            do
+                echo "Test on ${bold}$file2compress${sgr} :"
+                res=`echo "/usr/local/lib/antman_tester/easy/$file2compress"`
+                compress
+                echo " "
+            done
+            tput bold
+            echo "============"
+            echo "NORMAL TESTS"
+            echo "============"
+            tput sgr0
+            echo " "
+            bold=$(tput bold)
+            sgr=$(tput sgr0)
+            for file2compress in `ls /usr/local/lib/antman_tester/medium`
+            do
+                echo "Test on ${bold}$file2compress${sgr} :"
+                res=`echo "/usr/local/lib/antman_tester/medium/$file2compress"`
+                compress
+                echo " "
+            done
+            tput bold
+            echo "=========="
+            echo "HARD TESTS"
+            echo "=========="
+            tput sgr0
+            echo " "
+            bold=$(tput bold)
+            sgr=$(tput sgr0)
+            for file2compress in `ls /usr/local/lib/antman_tester/hard`
+            do
+                echo "Test on ${bold}$file2compress${sgr} :"
+                res=`echo "/usr/local/lib/antman_tester/hard/$file2compress"`
+                compress
+                echo " "
+            done
+        fi
+    else
+        tput setaf 1
+        echo "[ERROR] : antman file not found"
+        tput setaf init
+    fi
 else
-    tput setaf 1
-    echo "[ERROR] : antman file not found"
-    tput setaf init
+    if [[ $1 == "random" ]]
+    then
+    python3 /usr/local/lib/antman_tester/generator.py $2
+    FILE=./antman/antman
+    if [ -f $FILE ]
+    then
+        ./antman/antman test.txt 1 > compressed_file
+        python3 /usr/local/lib/antman_tester/pourcentage.py test.txt compressed_file
+        FILE2=./giantman/giantman
+        if [ -f $FILE2 ]
+        then
+            ./giantman/giantman compressed_file 1 > final_file
+            echo "file" > f1
+            echo "file" > f2
+            good=$(bash -c "diff f1 f2")
+            diff=$(bash -c "diff final_file test.txt")
+            OUTPUT=$(< test.txt)
+            OUTPUT2=$(< final_file)
+            if [[ $diff == $good ]]
+            then
+                tput setaf 2
+                echo "Antman 0K"
+                tput init
+            else
+                tput setaf 1
+                echo "Antman K0 : Output different from expected output"
+                tput init
+                echo "Expected :"
+                echo "$OUTPUT"
+                echo "But Got :"
+                echo "$OUTPUT2"
+            fi
+            rm -f f1
+            rm -f f2
+            rm -f final_file
+        else
+            tput setaf 1
+            echo "[ERROR] : giantman file not found"
+            tput setaf init
+        fi
+        rm -f compressed_file
+    else
+        tput setaf 1
+        echo "[ERROR] : antman file not found"
+        tput setaf init
+    fi
+    rm -rf test.txt
+    fi
+    if [[ $1 == "-h" ]]
+    then
+        cat /usr/local/lib/antman_tester/help.txt
+    fi
 fi
-rm -rf test.txt

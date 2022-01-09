@@ -1,0 +1,13 @@
+NAME
+
+    antman_tester - tester for antman
+
+USAGE
+
+    antman_tester : Execute basic tests
+    
+    antman_tester random [SIZE-OF-TEST-FILE] : test antman on randomly generated file
+
+DESCRIPTION
+
+    Test antman project with given configuations.
