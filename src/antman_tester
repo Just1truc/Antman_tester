@@ -1,8 +1,23 @@
 #!/bin/sh
 
 compress () {
+    DATE='/bin/date'
+    TOT_B=$SECONDS
+    BEFORE=$SECONDS
     ./antman/antman $res > compressed_file
+    AFTER=$SECONDS
+    tput setaf 3
+    ELAPSED=$(($AFTER - $BEFORE))
+    echo "Compression Time : $ELAPSED seconds"
+    BEFORE=$SECONDS
     ./giantman/giantman compressed_file > result
+    AFTER=$SECONDS
+    ELAPSED=$(($AFTER - $BEFORE))
+    echo "Decompression Time : $ELAPSED seconds"
+    TOT_F=$SECONDS
+    ELAPSED=$(($TOT_F - $TOT_B))
+    echo "Total Elapsed Time : $ELAPSED seconds"
+    tput init
     echo "file" > f1
     echo "file" > f2
     good=$(bash -c "diff f1 f2")
