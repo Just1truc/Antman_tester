@@ -4,13 +4,13 @@ compress () {
     DATE='/bin/date'
     TOT_B=$SECONDS
     BEFORE=$SECONDS
-    ./antman/antman $res > compressed_file
+    ./antman/antman $res 1 > compressed_file
     AFTER=$SECONDS
     tput setaf 3
     ELAPSED=$(($AFTER - $BEFORE))
     echo "Compression Time : $ELAPSED seconds"
     BEFORE=$SECONDS
-    ./giantman/giantman compressed_file > result
+    ./giantman/giantman compressed_file 1 > result
     AFTER=$SECONDS
     ELAPSED=$(($AFTER - $BEFORE))
     echo "Decompression Time : $ELAPSED seconds"
