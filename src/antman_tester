@@ -4,13 +4,13 @@ compress () {
     DATE='/bin/date'
     TOT_B=$SECONDS
     BEFORE=$SECONDS
-    ./antman/antman $res 1 > compressed_file
+    ./antman/antman $res $lvl > compressed_file
     AFTER=$SECONDS
     tput setaf 3
     ELAPSED=$(($AFTER - $BEFORE))
     echo "Compression Time : $ELAPSED seconds"
     BEFORE=$SECONDS
-    ./giantman/giantman compressed_file 1 > result
+    ./giantman/giantman compressed_file $lvl > result
     AFTER=$SECONDS
     ELAPSED=$(($AFTER - $BEFORE))
     echo "Decompression Time : $ELAPSED seconds"
@@ -58,6 +58,7 @@ then
             echo "=========="
             tput sgr0
             echo " "
+            lvl=1
             bold=$(tput bold)
             sgr=$(tput sgr0)
             for file2compress in `ls /usr/local/lib/antman_tester/easy`
@@ -67,6 +68,7 @@ then
                 compress
                 echo " "
             done
+            lvl=2
             tput bold
             echo "============"
             echo "NORMAL TESTS"
@@ -82,6 +84,7 @@ then
                 compress
                 echo " "
             done
+            lvl=3
             tput bold
             echo "=========="
             echo "HARD TESTS"
