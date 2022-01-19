@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 compress () {
     DATE='/bin/date'
@@ -16,6 +16,13 @@ compress () {
     echo "Decompression Time : $ELAPSED seconds"
     TOT_F=$SECONDS
     ELAPSED=$(($TOT_F - $TOT_B))
+    file_size=$(stat -c %s "$res")
+    compressed_size=$(stat -c %s "compressed_file")
+    div=`echo "100 - $compressed_size * 100 / $file_size" | bc`
+    if [[ `echo "$file_size - $compressed_size" | bc` > 0 ]]
+    then
+        total=`echo "$total + $div" | bc`
+    fi
     echo "Total Elapsed Time : $ELAPSED seconds"
     tput init
     echo "file" > f1
@@ -50,6 +57,8 @@ then
     if [ -f $FILE ]
     then
         FILE2=./giantman/giantman
+        total=0
+        nbr=0
         if [ -f $FILE2 ]
         then
             tput bold
@@ -64,6 +73,7 @@ then
             for file2compress in `ls /usr/local/lib/antman_tester/easy`
             do
                 echo "Test on ${bold}$file2compress${sgr} :"
+                nbr=`echo "$nbr + 1" | bc`
                 res=`echo "/usr/local/lib/antman_tester/easy/$file2compress"`
                 compress
                 echo " "
@@ -80,6 +90,7 @@ then
             for file2compress in `ls /usr/local/lib/antman_tester/medium`
             do
                 echo "Test on ${bold}$file2compress${sgr} :"
+                nbr=`echo "$nbr + 1" | bc`
                 res=`echo "/usr/local/lib/antman_tester/medium/$file2compress"`
                 compress
                 echo " "
@@ -96,6 +107,7 @@ then
             for file2compress in `ls /usr/local/lib/antman_tester/hard`
             do
                 echo "Test on ${bold}$file2compress${sgr} :"
+                nbr=`echo "$nbr + 1" | bc`
                 res=`echo "/usr/local/lib/antman_tester/hard/$file2compress"`
                 compress
                 echo " "
@@ -111,10 +123,20 @@ then
             for file2compress in `ls /usr/local/lib/antman_tester/custom`
             do
                 echo "Test on ${bold}$file2compress${sgr} :"
+                nbr=`echo "$nbr + 1" | bc`
                 res=`echo "/usr/local/lib/antman_tester/custom/$file2compress"`
                 compress
                 echo " "
             done
+            tput setaf 5
+            echo "=====  Average compression ====="
+            av=`echo "$total / $nbr" | bc`
+            tput blink
+            echo "     Compression : $av.0 %"
+            tput init
+            tput setaf 5
+            echo "================================"
+            tput init
         fi
     else
         tput setaf 1
